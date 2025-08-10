@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Communicatie Soundboard</title>
+
+  <!-- PWA manifest -->
+  <link rel="manifest" href="manifest.json" />
+  <meta name="theme-color" content="#004aad" />
+
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 0;
+      background-color: #f5f5f5;
+      display: flex;
+      flex-direction: column;
+      height: 100vh;
+    }
+    header {
+      background-color: #004aad;
+      color: white;
+      text-align: center;
+      padding: 1rem;
+      font-size: 1.5rem;
+    }
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+      gap: 10px;
+      padding: 10px;
+      flex-grow: 1;
+    }
+    .btn {
+      background-color: #ffffff;
+      border: 2px solid #004aad;
+      border-radius: 15px;
+      font-size: 1.5rem;
+      padding: 20px;
+      text-align: center;
+      cursor: pointer;
+      user-select: none;
+      transition: background-color 0.2s;
+    }
+    .btn:active {
+      background-color: #d6e4ff;
+    }
+    footer {
+      padding: 10px;
+      background-color: #e0e0e0;
+      text-align: center;
+    }
+    #spokenText {
+      font-size: 1.2rem;
+      margin-top: 10px;
+    }
+  </style>
+</head>
+<body>
+  <header>Communicatie Soundboard</header>
+
+  <div id="suggestions" class="grid"></div>
+
+  <div class="grid" id="buttons">
+    <div class="btn" onclick="speak('Hallo')">Hallo</div>
+    <div class="btn" onclick="speak('Ja')">Ja</div>
+    <div class="btn" onclick="speak('Nee')">Nee</div>
+    <div class="btn" onclick="speak('Dank je wel')">Dank je wel</div>
+    <div class="btn" onclick="speak('Ik heb hulp nodig')">Ik heb hulp nodig</div>
+    <div class="btn" onclick="speak('Ik heb pijn')">Ik heb pijn</div>
+    <div class="btn" onclick="speak('Ik wil iets drinken')">Ik wil iets drinken</div>
+    <div class="btn" onclick="speak('Ik wil naar buiten')">Ik wil naar buiten</div>
+  </div>
+
+  <footer>
+    <div id="spokenText">Tik op een knop om te spreken</div>
+  </footer>
+
+  <script>
+    function speak(text) {
+      const utterance = new SpeechSynthesisUtterance(text);
+      utterance.lang = 'nl-NL';
+      speechSynthesis.speak(utterance);
+      document.getElementById('spokenText').innerText = `Zegt: "${text}"`;
+    }
+
+    // PWA service worker registreren
+    if ('serviceWorker' in navigator) {
+      navigator.serviceWorker.register('service-worker.js')
+        .then(reg => console.log("Service Worker geregistreerd", reg))
+        .catch(err => console.error("Service Worker fout:", err));
+    }
+  </script>
+</body>
+</html>
